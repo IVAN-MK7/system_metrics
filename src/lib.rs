@@ -1,8 +1,29 @@
-use serde::{Deserialize, Serialize};
+use std::error::Error;
+use std::fmt;
 use std::sync::mpsc::Receiver;
 use std::time::{Duration, Instant};
 
+use serde::{Deserialize, Serialize};
 use sysinfo::{Networks, System};
+
+#[derive(Debug, Clone)]
+pub enum SystemStatsError {
+    /// Returned when the monitoring duration is effectively zero,
+    /// to prevent the metrics from being devided by zero for the averages' calculations.
+    InsufficientTimeElapsed,
+}
+
+impl fmt::Display for SystemStatsError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            SystemStatsError::InsufficientTimeElapsed => {
+                write!(f, "Not enough time elapsed for the system metrics gathering.")
+            }
+        }
+    }
+}
+
+impl Error for SystemStatsError {}
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub struct SystemStats {
@@ -47,6 +68,7 @@ pub enum TargetNetworkInterface {
 ///
 /// use system_metrics::{TargetNetworkInterface, get_system_stats};
 ///
+/// // Set up a channel to listen for CTRL+C interrupts,
 /// let (tx, rx): (Sender<()>, Receiver<()>) = mpsc::channel();
 ///
 /// // and register the handler.
@@ -58,7 +80,11 @@ pub enum TargetNetworkInterface {
 /// // Start the monitoring and retrieve the stats once it's done.
 /// let system_stats = get_system_stats(TargetNetworkInterface::FirstActive, Duration::from_secs(1), rx).unwrap();
 /// ```
-pub fn get_system_stats(network_interface: TargetNetworkInterface, duration: Duration, rx: Receiver<()>) -> Result<SystemStats, String> {
+pub fn get_system_stats(
+    network_interface: TargetNetworkInterface,
+    duration: Duration,
+    rx: Receiver<()>,
+) -> Result<SystemStats, SystemStatsError> {
     // Initialize system and network objects.
     let mut system = System::new_all();
     let mut networks = Networks::new_with_refreshed_list();
@@ -94,7 +120,7 @@ pub fn get_system_stats(network_interface: TargetNetworkInterface, duration: Dur
     // Prevent division by zero if the receiver woke up immediately.
     let time_divisor = match elapsed.as_secs_f32() {
         s if s > 0.0 => s,
-        _ => return Err("Not enough time elapsed for the system metrics gathering.".to_string()),
+        _ => return Err(SystemStatsError::InsufficientTimeElapsed),
     };
 
     // Sort the network interfaces' names to ensure predictable indexing.

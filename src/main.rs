@@ -112,7 +112,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     println!("Gathering metrics... (press CTRL+C to finish early)");
 
     // Start the monitoring and retrieve the stats once it's done.
-    let system_stats = get_system_stats(network_interface, duration, rx)?;
+    let system_stats = get_system_stats(network_interface, duration, rx).map_err(|e| e.to_string())?;
 
     // Serialize to pretty JSON.
     let system_stats_json = match serde_json::to_string_pretty(&system_stats) {

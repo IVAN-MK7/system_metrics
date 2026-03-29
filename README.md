@@ -1,6 +1,6 @@
 # CLI tool for monitoring system resources usage, made with Rust 🦀
 
-[<img alt="github" src="https://img.shields.io/badge/github-IVAN--MK7%2Fsystem__metrics-8da0cb?logo=github" height="20">](https://github.com/IVAN-MK7/system_metrics)
+[<img alt="github" src="https://img.shields.io/badge/github-IVAN--MK7%2Fsystem__metrics-00bbff?logo=github" height="20">](https://github.com/IVAN-MK7/system_metrics)
 [![Apache](https://img.shields.io/badge/license-Apache-blue.svg)](https://github.com/IVAN-MK7/system_metrics/blob/main/LICENSE)
 
 ## Examples

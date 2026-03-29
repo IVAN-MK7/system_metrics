@@ -1,0 +1,27 @@
+[package]
+name = "system_metrics"
+version = "0.1.0"
+edition = "2024"
+
+# Favors max performance.
+[profile.release]
+lto = "fat"       # "thin" to compile faster
+codegen-units = 1 # Increase (best to 16) to compile faster
+# For further performance gains:
+#
+# On Windows OS:
+# $env:RUSTFLAGS='-C target-cpu=native'; cargo run --release
+#
+# On Linux OS:
+# RUSTFLAGS="-C target-cpu=native" cargo run --release
+
+[dependencies]
+# Library crate
+sysinfo = "0.38"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# CLI - binary crate
+clap = { version = "4.6.0", features = ["derive"] }
+dialoguer = "0.12.0"
+ctrlc = "3.5.2"

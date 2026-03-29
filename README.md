@@ -1,5 +1,8 @@
 # CLI tool for monitoring system resources usage, made with Rust 🦀
 
+[<img alt="github" src="https://img.shields.io/badge/github-IVAN--MK7%2Fsystem__metrics-8da0cb?logo=github" height="20">](https://github.com/IVAN-MK7/system_metrics)
+[![Apache](https://img.shields.io/badge/license-Apache-blue.svg)](https://github.com/IVAN-MK7/system_metrics/blob/main/LICENSE)
+
 ## Examples
 
 #### Interactive CLI usage
@@ -19,8 +22,8 @@ cargo build --release
 ```json
 {
   "cpu_usage_percent": 7.7,
-  "ram_used_mb": 19704,    
-  "ram_total_mb": 32416,   
+  "ram_used_mb": 19704,
+  "ram_total_mb": 32416,
   "network": {
     "upload_kbps": 3.3,
     "download_kbps": 3.3

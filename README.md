@@ -14,6 +14,20 @@ cargo build --release
 ./target/release/system_metrics
 ```
 
+**Sample output**:
+
+```json
+{
+  "cpu_usage_percent": 7.7,
+  "ram_used_mb": 19704,    
+  "ram_total_mb": 32416,   
+  "network": {
+    "upload_kbps": 3.3,
+    "download_kbps": 3.3
+  }
+}
+```
+
 #### Library usage
 
 `./Cargo.toml`:

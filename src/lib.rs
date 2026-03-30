@@ -1,29 +1,17 @@
-use std::error::Error;
-use std::fmt;
 use std::sync::mpsc::Receiver;
 use std::time::{Duration, Instant};
 
 use serde::{Deserialize, Serialize};
 use sysinfo::{Networks, System};
+use thiserror::Error;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Error)]
 pub enum SystemStatsError {
     /// Returned when the monitoring duration is effectively zero,
     /// to prevent the metrics from being devided by zero for the averages' calculations.
+    #[error("Not enough time elapsed for the system metrics gathering.")]
     InsufficientTimeElapsed,
 }
-
-impl fmt::Display for SystemStatsError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            SystemStatsError::InsufficientTimeElapsed => {
-                write!(f, "Not enough time elapsed for the system metrics gathering.")
-            }
-        }
-    }
-}
-
-impl Error for SystemStatsError {}
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub struct SystemStats {
